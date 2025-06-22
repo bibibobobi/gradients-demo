@@ -35,7 +35,7 @@ export default function Gradient4() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 text-white drop-shadow-lg">
+          <h1 className="text-xl md:text-2xl font-bold mb-6 text-white drop-shadow-lg">
             Method 4
           </h1>
 

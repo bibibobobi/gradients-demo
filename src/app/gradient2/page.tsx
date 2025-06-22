@@ -187,17 +187,11 @@ export default function Gradient2() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <motion.h1
-            className="text-5xl md:text-7xl font-bold mb-6 text-white drop-shadow-lg"
-            style={{ fontFamily: "Georgia, serif" }}
-          >
+          <motion.h1 className="text-xl md:text-2xl font-bold mb-6 text-white drop-shadow-lg">
             Method 2
           </motion.h1>
 
-          <motion.h2
-            className="text-3xl md:text-5xl font-bold mb-8 text-white/90"
-            style={{ fontFamily: "Georgia, serif" }}
-          >
+          <motion.h2 className="text-3xl md:text-5xl font-bold mb-8 text-white/90">
             Advanced CSS Blobs
           </motion.h2>
 
