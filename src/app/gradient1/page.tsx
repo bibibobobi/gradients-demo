@@ -10,7 +10,7 @@ export default function Gradient1() {
       <div className="absolute inset-0 css-gradient" />
 
       {/* Content */}
-      <div className="relative z-10 text-center max-w-4xl mx-auto px-6">
+      <div className="relative z-10 text-center max-w-4xl mt-10 mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
