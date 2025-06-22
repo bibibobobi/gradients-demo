@@ -1,26 +1,136 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html,
+body {
+  height: 100%;
+  overflow-x: hidden;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: #000;
+  color: white;
+}
+
+/* CSS Gradient Animations */
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes blobMove {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(100px, -50px) scale(1.2);
+  }
+  66% {
+    transform: translate(-50px, 100px) scale(0.8);
+  }
+}
+
+@keyframes float3d {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+  }
+  20% {
+    transform: translate(30px, -40px) rotate(72deg) scale(1.1);
+  }
+  40% {
+    transform: translate(-20px, -80px) rotate(144deg) scale(0.9);
+  }
+  60% {
+    transform: translate(-40px, -20px) rotate(216deg) scale(1.2);
+  }
+  80% {
+    transform: translate(20px, 20px) rotate(288deg) scale(0.8);
+  }
+}
+
+@keyframes noiseShift {
+  0% {
+    background-position: 0 0, 20px 20px, 40px 40px, 60px 60px, 80px 80px, 0 0;
+  }
+  100% {
+    background-position: 80px 80px, 100px 100px, 140px 140px, 160px 160px,
+      180px 180px, 0 0;
+  }
+}
+
+/* Gradient Classes */
+.css-gradient {
+  background: linear-gradient(
+    45deg,
+    #ff6b6b,
+    #4ecdc4,
+    #45b7d1,
+    #96ceb4,
+    #ffeaa7
+  );
+  background-size: 300% 300%;
+  animation: gradientShift 4s ease infinite;
+}
+
+.blob-gradient {
+  background: radial-gradient(circle at 20% 80%, #ff6b6b 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, #4ecdc4 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, #45b7d1 0%, transparent 50%);
+  background-size: 200% 200%;
+  animation: blobMove 6s ease-in-out infinite;
+}
+
+.noise-gradient {
+  background: radial-gradient(circle at 25% 25%, #ff6b6b 0%, transparent 25%),
+    radial-gradient(circle at 75% 75%, #4ecdc4 0%, transparent 25%),
+    radial-gradient(circle at 50% 10%, #45b7d1 0%, transparent 30%),
+    radial-gradient(circle at 10% 60%, #96ceb4 0%, transparent 20%),
+    radial-gradient(circle at 90% 40%, #ffeaa7 0%, transparent 25%),
+    linear-gradient(45deg, #667eea, #764ba2);
+  background-size: 80px 80px, 60px 60px, 100px 100px, 70px 70px, 90px 90px,
+    100% 100%;
+  animation: noiseShift 10s linear infinite;
+}
+
+/* 3D Shapes Gradient */
+.shapes-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  filter: blur(60px);
+}
+
+.gradient-shape {
+  position: absolute;
+  border-radius: 50%;
+  animation: float3d 12s ease-in-out infinite;
+}
+
+/* Navigation */
+.nav-indicator {
+  transition: all 0.3s ease;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.nav-indicator.active {
+  background: white;
+  transform: scale(1.2);
 }
