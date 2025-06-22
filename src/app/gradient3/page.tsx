@@ -2,168 +2,128 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { useEffect, useRef } from "react";
-import * as THREE from "three";
+import { Canvas } from "@react-three/fiber";
+import { Float } from "@react-three/drei";
 
-const shapes = [
-  { size: 500, color: "#ffaeff", x: 10, y: 10, delay: 0 },
-  { size: 480, color: "#4ecdc4", x: 70, y: 20, delay: 2 },
-  { size: 360, color: "#45b7d1", x: 20, y: 70, delay: 4 },
-  { size: 520, color: "#667eea", x: 50, y: 50, delay: 6 },
-  { size: 440, color: "#ffeaa7", x: 80, y: 80, delay: 8 },
-];
-
-export default function Gradient3() {
-  const mountRef = useRef<HTMLDivElement>(null);
-  const sceneRef = useRef<THREE.Scene | null>(null);
-  const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
-  const meshesRef = useRef<THREE.Mesh[]>([]);
-
-  useEffect(() => {
-    const mountNode = mountRef.current;
-    if (!mountNode) return;
-
-    // Scene setup
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(
-      75,
-      window.innerWidth / window.innerHeight,
-      0.1,
-      1000
-    );
-    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setClearColor(0x000000, 0);
-    mountNode.appendChild(renderer.domElement);
-
-    sceneRef.current = scene;
-    rendererRef.current = renderer;
-
-    // Create 3D shapes
-    const meshes: THREE.Mesh[] = [];
-    const colors = [0xffaeff, 0x4ecdc4, 0x45b7d1, 0x667eea, 0xffeaa7];
-    const geometries = [
-      new THREE.SphereGeometry(3, 32, 32),
-      new THREE.BoxGeometry(4, 4, 4),
-      new THREE.ConeGeometry(3, 5, 8),
-      new THREE.OctahedronGeometry(3.5),
-      new THREE.TorusGeometry(3, 1.2, 16, 100),
-    ];
-
-    for (let i = 0; i < 5; i++) {
-      const geometry = geometries[i];
-      const material = new THREE.MeshBasicMaterial({
-        color: colors[i],
-        transparent: true,
-        opacity: 0.8,
-      });
-      const mesh = new THREE.Mesh(geometry, material);
-
-      // Random initial positions
-      mesh.position.set(
-        (Math.random() - 0.5) * 15,
-        (Math.random() - 0.5) * 15,
-        (Math.random() - 0.5) * 8
-      );
-
-      scene.add(mesh);
-      meshes.push(mesh);
+const FloatingShape = ({
+  geometry,
+  color,
+  position,
+  speed,
+  rotationIntensity,
+  floatIntensity,
+}: {
+  geometry: string;
+  color: string;
+  position: [number, number, number];
+  speed?: number;
+  rotationIntensity?: number;
+  floatIntensity?: number;
+}) => {
+  const renderGeometry = () => {
+    switch (geometry) {
+      case "sphere":
+        return <sphereGeometry args={[20, 42, 42]} />;
+      case "box":
+        return <boxGeometry args={[25, 25, 25]} />;
+      case "cone":
+        return <coneGeometry args={[22, 35, 18]} />;
+      case "octahedron":
+        return <octahedronGeometry args={[20]} />;
+      case "torus":
+        return <torusGeometry args={[24, 16, 26, 250]} />;
+      default:
+        return <sphereGeometry args={[25, 42, 42]} />;
     }
-
-    meshesRef.current = meshes;
-    camera.position.z = 12;
-
-    // Animation loop
-    let animationFrame: number;
-    const animate = () => {
-      meshes.forEach((mesh, index) => {
-        // Random movement similar to the second method
-        const time = Date.now() * 0.001 + index * 0.5;
-        mesh.position.x = Math.sin(time * 0.5) * 5;
-        mesh.position.y = Math.cos(time * 0.3) * 4;
-        mesh.position.z = Math.sin(time * 0.7) * 3;
-
-        // Random rotation (slower)
-        mesh.rotation.x += 0.002 + index * 0.0005;
-        mesh.rotation.y += 0.003 + index * 0.0003;
-        mesh.rotation.z += 0.001 + index * 0.0007;
-      });
-
-      renderer.render(scene, camera);
-      animationFrame = requestAnimationFrame(animate);
-    };
-
-    animate();
-
-    // Handle resize
-    const handleResize = () => {
-      if (!camera || !renderer) return;
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      if (animationFrame) {
-        cancelAnimationFrame(animationFrame);
-      }
-      if (mountNode && renderer.domElement) {
-        mountNode.removeChild(renderer.domElement);
-      }
-      // Cleanup
-      meshes.forEach((mesh) => {
-        if (mesh.geometry) mesh.geometry.dispose();
-        if (mesh.material) (mesh.material as THREE.Material).dispose();
-      });
-      renderer.dispose();
-    };
-  }, []);
+  };
 
   return (
+    <Float
+      speed={speed || 1}
+      rotationIntensity={rotationIntensity || 0.2}
+      floatIntensity={floatIntensity || 0.5}
+      floatingRange={[-2, 2]}
+    >
+      <mesh position={position}>
+        {renderGeometry()}
+        <meshBasicMaterial color={color} transparent opacity={0.8} />
+      </mesh>
+    </Float>
+  );
+};
+
+export default function Gradient3() {
+  return (
     <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-black">
-      {/* Three.js Canvas with blur filter */}
+      {/* React Three Fiber Canvas with Float components */}
       <div
-        ref={mountRef}
         className="absolute inset-0 w-full h-full"
         style={{
-          filter: "blur(40px)",
+          filter: "blur(80px)",
         }}
-      />
-
-      {/* CSS Fallback shapes for additional effect */}
-      <div className="absolute inset-0">
-        <div className="shapes-container">
-          {shapes.map((shape, i) => (
-            <motion.div
-              key={i}
-              className="gradient-shape"
-              style={{
-                width: shape.size,
-                height: shape.size,
-                background: `radial-gradient(circle, ${shape.color}, ${shape.color}88)`,
-                left: `${shape.x}%`,
-                top: `${shape.y}%`,
-                animationDelay: `${shape.delay}s`,
-              }}
-              animate={{
-                x: [0, 50, -30, 0],
-                y: [0, -40, 30, 0],
-                rotate: [0, 180, 360],
-                scale: [1, 1.2, 0.8, 1],
-              }}
-              transition={{
-                duration: 12,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: shape.delay,
-              }}
-            />
-          ))}
-        </div>
+      >
+        <Canvas
+          camera={{ position: [0, 0, 35], fov: 90 }}
+          gl={{ alpha: true, antialias: true }}
+          style={{ background: "transparent" }}
+        >
+          <FloatingShape
+            geometry="sphere"
+            color="#ff7ebe"
+            position={[-8, 5, 0]}
+            speed={3.5}
+            rotationIntensity={2.0}
+            floatIntensity={2.0}
+          />
+          <FloatingShape
+            geometry="box"
+            color="#1c95ff"
+            position={[10, -5, -8]}
+            speed={4.0}
+            rotationIntensity={1.8}
+            floatIntensity={2.5}
+          />
+          <FloatingShape
+            geometry="cone"
+            color="#62defa"
+            position={[-5, -8, 5]}
+            speed={2.8}
+            rotationIntensity={2.5}
+            floatIntensity={1.8}
+          />
+          <FloatingShape
+            geometry="octahedron"
+            color="#8437ff"
+            position={[6, 8, -5]}
+            speed={5.0}
+            rotationIntensity={1.5}
+            floatIntensity={3.0}
+          />
+          <FloatingShape
+            geometry="torus"
+            color="#7ec1fb"
+            position={[-12, 0, 8]}
+            speed={3.2}
+            rotationIntensity={3.0}
+            floatIntensity={2.2}
+          />
+          <FloatingShape
+            geometry="sphere"
+            color="#fb88ff"
+            position={[0, -10, -3]}
+            speed={4.5}
+            rotationIntensity={1.2}
+            floatIntensity={2.8}
+          />
+          <FloatingShape
+            geometry="box"
+            color="#a4fae8"
+            position={[8, 6, 10]}
+            speed={3.8}
+            rotationIntensity={2.2}
+            floatIntensity={1.5}
+          />
+        </Canvas>
       </div>
 
       {/* Content */}
@@ -178,46 +138,82 @@ export default function Gradient3() {
           </h1>
 
           <h2 className="text-3xl md:text-5xl font-bold mb-8 text-white/90">
-            3D Elements + CSS Blur
+            React Three Drei Float
           </h2>
 
           <div className="bg-black/40 backdrop-blur-md rounded-2xl p-8 mb-8 border border-white/10">
             <p className="text-xl text-white/90 mb-6">
-              Create a bunch of 3D elements, make them move in random fashion,
-              then add CSS blur filter.
+              Using React Three Drei&apos;s Float component for natural 3D
+              movement, then add CSS blur filter.
             </p>
+            {/* 
+            <div className="bg-purple-900/20 border border-purple-500/30 rounded-lg p-4 mb-6">
+              <p className="text-lg text-purple-200 mb-2">
+                💡 <strong>The Magic:</strong>
+              </p>
+              <p className="text-white/90 text-base">
+                When 3D shapes move around in the scene, they mesh into one
+                another. Adding blur on top creates unique, organic gradients
+                that are impossible to achieve with static CSS.
+              </p>
+            </div> */}
 
             <div className="text-left bg-black/50 rounded-lg p-4 font-mono text-sm">
               <div className="text-gray-300">
                 <span className="text-gray-400">
-                  {"// Create 3D geometries"}
+                  {"// Using React Three Drei Float component"}
                 </span>
               </div>
-              <div className="text-gray-300">
-                <span className="text-blue-400">const</span> geometry ={" "}
-                <span className="text-purple-400">
-                  new THREE.SphereGeometry
-                </span>
-                (<span className="text-yellow-400">1, 32, 32</span>);
-              </div>
-              <div className="text-gray-300">
-                <span className="text-blue-400">const</span> material ={" "}
-                <span className="text-purple-400">
-                  new THREE.MeshBasicMaterial
-                </span>
-              </div>
-              <div className="text-gray-300 ml-4">
-                <span className="text-blue-400">color:</span>
-                <span className="text-yellow-400">0xff6b6b</span>
-                <span className="text-blue-400">opacity:</span>
-                <span className="text-yellow-400">0.8</span>
-              </div>
-              <div className="text-gray-300">{"});"}</div>
               <div className="text-gray-300 mt-2">
-                <span className="text-gray-400">{"/* CSS blur filter */"}</span>
+                <span className="text-purple-400">{"<Float"}</span>
+              </div>
+              <div className="text-gray-300 ml-2">
+                <span className="text-blue-400">speed</span>={"{"}
+                <span className="text-yellow-400">1</span>
+                {"}"}{" "}
+                <span className="text-gray-400">
+                  {" // Animation speed, defaults to 1"}
+                </span>
+              </div>
+              <div className="text-gray-300 ml-2">
+                <span className="text-blue-400">rotationIntensity</span>={"{"}
+                <span className="text-yellow-400">0.2</span>
+                {"}"}{" "}
+                <span className="text-gray-400">
+                  {"// XYZ rotation intensity"}
+                </span>
+              </div>
+              <div className="text-gray-300 ml-2">
+                <span className="text-blue-400">floatIntensity</span>={"{"}
+                <span className="text-yellow-400">0.5</span>
+                {"}"}{" "}
+                <span className="text-gray-400">
+                  {"// Up/down float intensity"}
+                </span>
+              </div>
+              <div className="text-gray-300 ml-2">
+                <span className="text-blue-400">floatingRange</span>={"{"}
+                <span className="text-yellow-400">[1, 10]</span>
+                {"}"}{" "}
+                <span className="text-gray-400">
+                  {"// Range of y-axis values"}
+                </span>
+              </div>
+              <div className="text-gray-300">{">"}</div>
+              <div className="text-gray-300 ml-2">
+                <span className="text-purple-400">{"<mesh"}</span>{" "}
+                <span className="text-purple-400">{"/>"}</span>
               </div>
               <div className="text-gray-300">
-                <span className="text-blue-400">filter:</span>
+                <span className="text-purple-400">{"</Float>"}</span>
+              </div>
+              <div className="text-gray-300 mt-3">
+                <span className="text-gray-400">
+                  {"/* CSS blur filter creates organic blending */"}
+                </span>
+              </div>
+              <div className="text-gray-300">
+                <span className="text-blue-400">filter:</span>{" "}
                 <span className="text-green-400">blur</span>(
                 <span className="text-yellow-400">40px</span>);
               </div>

@@ -36,7 +36,7 @@ export default function Navigation() {
       </div>
 
       {/* Page Info */}
-      <div className="text-center mt-4">
+      {/* <div className="text-center mt-4">
         <motion.p
           key={pathname}
           initial={{ opacity: 0, y: 10 }}
@@ -45,7 +45,7 @@ export default function Navigation() {
         >
           {routes.find((route) => route.path === pathname)?.label || "Home"}
         </motion.p>
-      </div>
+      </div> */}
     </nav>
   );
 }
