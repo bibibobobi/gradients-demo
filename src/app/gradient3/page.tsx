@@ -54,7 +54,7 @@ const FloatingShape = ({
 
 export default function Gradient3() {
   return (
-    <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-black">
+    <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-pink-200">
       {/* React Three Fiber Canvas with Float components */}
       <div
         className="absolute inset-0 w-full h-full"
@@ -69,7 +69,7 @@ export default function Gradient3() {
         >
           <FloatingShape
             geometry="sphere"
-            color="#ff7ebe"
+            color="#ff297f"
             position={[-8, 5, 0]}
             speed={3.5}
             rotationIntensity={2.0}
@@ -77,7 +77,7 @@ export default function Gradient3() {
           />
           <FloatingShape
             geometry="box"
-            color="#1c95ff"
+            color="#0d8dfd"
             position={[10, -5, -8]}
             speed={4.0}
             rotationIntensity={1.8}
@@ -85,7 +85,7 @@ export default function Gradient3() {
           />
           <FloatingShape
             geometry="cone"
-            color="#62defa"
+            color="#fff958"
             position={[-5, -8, 5]}
             speed={2.8}
             rotationIntensity={2.5}
@@ -101,7 +101,7 @@ export default function Gradient3() {
           />
           <FloatingShape
             geometry="torus"
-            color="#7ec1fb"
+            color="#fb88ff"
             position={[-12, 0, 8]}
             speed={3.2}
             rotationIntensity={3.0}
@@ -109,7 +109,7 @@ export default function Gradient3() {
           />
           <FloatingShape
             geometry="sphere"
-            color="#fb88ff"
+            color="#1cff60"
             position={[0, -10, -3]}
             speed={4.5}
             rotationIntensity={1.2}
@@ -117,7 +117,7 @@ export default function Gradient3() {
           />
           <FloatingShape
             geometry="box"
-            color="#a4fae8"
+            color="#16fecb"
             position={[8, 6, 10]}
             speed={3.8}
             rotationIntensity={2.2}
