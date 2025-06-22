@@ -49,6 +49,33 @@ export default function Gradient1() {
                 <span className="text-yellow-400">4s ease infinite</span>;
               </div>
             </div>
+
+            <div className="mt-6 pt-4 border-t border-white/10">
+              <p className="text-sm text-white/70 mb-2">
+                🛠️ There are bunch of online tools you can use such as:
+              </p>
+              <a
+                href="https://gradient-tool-lovat.vercel.app"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-blue-300 hover:text-blue-200 transition-colors duration-300 underline text-sm"
+              >
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                  />
+                </svg>
+                Gradient Tool - Interactive CSS Gradient Generator
+              </a>
+            </div>
           </div>
 
           <div className="flex justify-between items-center">
